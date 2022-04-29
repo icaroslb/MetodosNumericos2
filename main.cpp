@@ -45,7 +45,7 @@ int main()
     }
 
     N *= 2;
-  } while (fabs( ( integralNova - integralVelha / integralNova ) ) > eps );
+  } while (fabs( ( integralNova - integralVelha ) / integralNova ) > eps );
   
   std::cout << integralNova << " - " << N << std::endl;
 
