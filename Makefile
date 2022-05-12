@@ -1,7 +1,7 @@
-all: GaussLegendre.o main
+all: ExponenciacaoSimples.o main
 
-GaussLegendre.o: GaussLegendre.cpp GaussLegendre.h
+ExponenciacaoSimples.o: ExponenciacaoSimples.cpp ExponenciacaoSimples.h
 	g++ -g -c $< -o $@
 
-main: main.cpp GaussLegendre.o
-	g++ $^ -o $@ -lmuparser
+main: main.cpp ExponenciacaoSimples.o
+	g++ $^ -o $@

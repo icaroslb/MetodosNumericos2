@@ -2,14 +2,19 @@
 
 #include <string>
 #include <limits>
-#include "GaussLegendre.h"
+//#include "GaussLegendre.h"
+#include "ExponenciacaoSimples.h"
 
 int main()
 {
   double a;
   double b;
+  double cInicial;
+  double c;
   double eps;
+  double passo;
   int qtdPontos;
+  int grau;
 
   std::cout << "Integração de Gauss Legendre" << std::endl;
 
@@ -19,35 +24,45 @@ int main()
   std::cout << "Fim do intervalo: ";
   std::cin >> b;
 
-  std::cout << "Número de pontos de Legendre: ";
+  //std::cout << "Número de grau de Hermit: ";
+  //std::cin >> grau;
+
+  std::cout << "Quantidade de pontos de Legendre: ";
   std::cin >> qtdPontos;
+
+  std::cout << "Insira o valor do corte: ";
+  std::cin >> cInicial;
 
   std::cout << "Tolerância: ";
   std::cin >> eps;
 
-  double integralNova = std::numeric_limits<double>::infinity();
-  double integralVelha;
-  int N = 1;
+  double resultadoAnt;
+  double resultadoNovo = std::numeric_limits<double>::infinity();
+
+  //double resultado = GaussHermitExpSimples(a, b, grau);
+
+  c = cInicial;
+  passo = 0.1;
 
   do
   {
-    integralVelha = integralNova;
+    resultadoAnt = resultadoNovo;
 
-    double deltaX = ( b - a ) / N;
+    resultadoNovo = GaussLegendreParticoesExpSImples(a, b, -c, c, qtdPontos, eps);
 
-    integralNova = 0.0;
+    c += passo;
 
-    for ( int i = 0; i < N; i++ )
+    if (isnan( resultadoNovo ) || isinf( resultadoNovo ))
     {
-      double xIn = a + ( i * deltaX );
-      double xFin = xIn + deltaX;
-      integralNova += GaussLegendre( xIn, xFin, qtdPontos );
+      c = cInicial;
+      passo /= 10;
+      resultadoNovo = std::numeric_limits<double>::infinity();
+      continue;
     }
 
-    N *= 2;
-  } while (fabs( ( integralNova - integralVelha ) / integralNova ) > eps );
-  
-  std::cout << integralNova << " - " << N << std::endl;
+  } while (fabs( ( resultadoNovo - resultadoAnt ) / resultadoNovo ) > eps);
+
+  std::cout << resultadoNovo << " - " << c - passo << std::endl;
 
   return 0;
 }

@@ -10,6 +10,33 @@ double x_s (double ini, double fim, double s)
   return ( ( fim + ini ) / 2.0 ) + ( ( ( fim - ini ) / 2.0 ) * s );
 }
 
+double GaussLegendreParticoes (double ini, double fim, int qtdPontos, double eps)
+{
+  double integralNova = std::numeric_limits<double>::infinity();
+  double integralVelha;
+  int N = 1;
+
+  do
+  {
+    integralVelha = integralNova;
+
+    double deltaX = ( fim - ini ) / N;
+
+    integralNova = 0.0;
+
+    for ( int i = 0; i < N; i++ )
+    {
+      double xIn = ini + ( i * deltaX );
+      double xFin = xIn + deltaX;
+      integralNova += GaussLegendre( xIn, xFin, qtdPontos );
+    }
+
+    N *= 2;
+  } while (fabs( ( integralNova - integralVelha ) / integralNova ) > eps );
+
+  return integralNova;
+}
+
 double GaussLegendre (double ini, double fim, int qtdPontos)
 {
   double resultado;
